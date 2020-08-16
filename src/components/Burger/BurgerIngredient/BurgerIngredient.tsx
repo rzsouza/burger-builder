@@ -1,25 +1,27 @@
 import React from 'react';
 import classes from './BurgerIngredient.module.scss';
-import IngredientType from './IngredientType';
+import IngredientTypes from './IngredientTypes';
 
-const BurgerIngredient: React.FC<{ type: IngredientType }> = ({ type }) => {
-  switch (type) {
-    case IngredientType.BreadBottom:
+const BurgerIngredient: React.FC<{ igType: IngredientTypes }> = ({
+  igType,
+}) => {
+  switch (igType) {
+    case 'bread-bottom':
       return <div className={classes.BreadBottom} />;
-    case IngredientType.BreadTop:
+    case 'bread-top':
       return (
         <div className={classes.BreadTop}>
           <div className={classes.Seeds1} />
           <div className={classes.Seeds2} />
         </div>
       );
-    case IngredientType.Meat:
+    case 'meat':
       return <div className={classes.Meat} />;
-    case IngredientType.Cheese:
+    case 'cheese':
       return <div className={classes.Cheese} />;
-    case IngredientType.Salad:
+    case 'salad':
       return <div className={classes.Salad} />;
-    case IngredientType.Bacon:
+    case 'bacon':
       return <div className={classes.Bacon} />;
     default:
       return null;

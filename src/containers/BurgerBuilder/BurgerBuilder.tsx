@@ -1,11 +1,21 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import Burger from '../../components/Burger/Burger';
+import IngredientListProvider from '../../components/Burger/BurgerIngredient/IngredientList';
 
-const burgerBuilder = () => (
-  <Fragment>
-    <Burger />
-    <div>Build Controls</div>
-  </Fragment>
-);
+function BurgerBuilder() {
+  const [ingredients] = useState<IngredientListProvider>({
+    salad: 1,
+    bacon: 1,
+    cheese: 2,
+    meat: 2,
+  });
 
-export default burgerBuilder;
+  return (
+    <Fragment>
+      <Burger ingredients={ingredients} />
+      <div>Build Controls</div>
+    </Fragment>
+  );
+}
+
+export default BurgerBuilder;
