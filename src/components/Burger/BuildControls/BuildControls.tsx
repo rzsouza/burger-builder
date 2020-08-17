@@ -17,8 +17,10 @@ const BuildControls: React.FC<{
   ingredientAdded: IngredientToVoidFunction;
   ingredientRemoved: IngredientToVoidFunction;
   disabledInfo: IngredientListBoolean;
-}> = ({ ingredientAdded, ingredientRemoved, disabledInfo }) => (
+  price: number;
+}> = ({ ingredientAdded, ingredientRemoved, disabledInfo, price }) => (
   <div className={classes.BuildControls}>
+    <p>Current Price: {price}</p>
     {controls.map((ctrl) => (
       <BuildControl
         key={ctrl.label}

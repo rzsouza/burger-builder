@@ -61,6 +61,7 @@ const BurgerBuilder = () => {
     <Fragment>
       <Burger ingredients={state.ingredients} />
       <BuildControls
+        price={state.totalPrice}
         ingredientAdded={ingredientAddedHandler}
         ingredientRemoved={ingredientRemovedHandler}
         disabledInfo={disabledInfo}
