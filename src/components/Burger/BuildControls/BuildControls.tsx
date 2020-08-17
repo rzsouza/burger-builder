@@ -20,7 +20,9 @@ const BuildControls: React.FC<{
   price: number;
 }> = ({ ingredientAdded, ingredientRemoved, disabledInfo, price }) => (
   <div className={classes.BuildControls}>
-    <p>Current Price: {price}</p>
+    <p>
+      Current Price: <strong>{price.toFixed(2)}</strong>
+    </p>
     {controls.map((ctrl) => (
       <BuildControl
         key={ctrl.label}
