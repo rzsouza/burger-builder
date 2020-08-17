@@ -1,6 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import Burger from '../../components/Burger/Burger';
-import IngredientList from '../../components/Burger/BurgerIngredient/IngredientList';
+import IngredientList, {
+  IngredientListBoolean,
+} from '../../components/Burger/BurgerIngredient/IngredientList';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import IngredientType from '../../components/Burger/BurgerIngredient/IngredientType';
 
@@ -26,7 +28,6 @@ const BurgerBuilder = () => {
   });
 
   const ingredientAddedHandler = (igType: IngredientType) => {
-    console.log('added');
     const oldCount = state.ingredients[igType] || 0;
     const updatedCount = oldCount + 1;
     const updatedState = { ...state };
@@ -36,8 +37,10 @@ const BurgerBuilder = () => {
     setState(updatedState);
   };
 
-  const removeIngredientHandler = (igType: IngredientType) => {
+  const ingredientRemovedHandler = (igType: IngredientType) => {
     const oldCount = state.ingredients[igType] || 0;
+    if (oldCount <= 0) return;
+
     const updatedCount = oldCount - 1;
     const updatedState = { ...state };
     const oldPrice = state.totalPrice || 0;
@@ -46,10 +49,22 @@ const BurgerBuilder = () => {
     setState(updatedState);
   };
 
+  const actualIngredients = state.ingredients;
+  const disabledInfo: IngredientListBoolean = {};
+  let key: IngredientType;
+  for (key in actualIngredients) {
+    // noinspection JSUnfilteredForInLoop
+    disabledInfo[key] = (actualIngredients[key] || 0) <= 0;
+  }
+
   return (
     <Fragment>
       <Burger ingredients={state.ingredients} />
-      <BuildControls ingredientAdded={ingredientAddedHandler} />
+      <BuildControls
+        ingredientAdded={ingredientAddedHandler}
+        ingredientRemoved={ingredientRemovedHandler}
+        disabledInfo={disabledInfo}
+      />
     </Fragment>
   );
 };
