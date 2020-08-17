@@ -17,9 +17,8 @@ const BuildControls: React.FC<{
     {controls.map((ctrl) => (
       <BuildControl
         key={ctrl.label}
-        type={ctrl.type}
         label={ctrl.label}
-        added={ingredientAdded}
+        added={() => ingredientAdded(ctrl.type)}
       />
     ))}
   </div>
