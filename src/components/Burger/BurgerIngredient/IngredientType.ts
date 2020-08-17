@@ -1,4 +1,4 @@
-type IngredientTypes =
+type IngredientType =
   | 'bread-bottom'
   | 'bread-top'
   | 'meat'
@@ -6,4 +6,4 @@ type IngredientTypes =
   | 'salad'
   | 'bacon';
 
-export default IngredientTypes;
+export default IngredientType;

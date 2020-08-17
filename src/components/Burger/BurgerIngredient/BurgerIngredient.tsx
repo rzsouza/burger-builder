@@ -1,10 +1,8 @@
 import React from 'react';
 import classes from './BurgerIngredient.module.scss';
-import IngredientTypes from './IngredientTypes';
+import IngredientType from './IngredientType';
 
-const BurgerIngredient: React.FC<{ igType: IngredientTypes }> = ({
-  igType,
-}) => {
+const BurgerIngredient: React.FC<{ igType: IngredientType }> = ({ igType }) => {
   switch (igType) {
     case 'bread-bottom':
       return <div className={classes.BreadBottom} />;

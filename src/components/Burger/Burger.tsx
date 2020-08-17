@@ -2,13 +2,13 @@ import React from 'react';
 import classes from './Burger.module.scss';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 import IngredientList from './BurgerIngredient/IngredientList';
-import IngredientTypes from './BurgerIngredient/IngredientTypes';
+import IngredientType from './BurgerIngredient/IngredientType';
 
 const Burger: React.FC<{ ingredients: IngredientList }> = ({ ingredients }) => {
   let transformedIngredients: JSX.Element[] | JSX.Element = (Object.keys(
     ingredients
-  ) as IngredientTypes[])
-    .map((igKey: IngredientTypes) =>
+  ) as IngredientType[])
+    .map((igKey: IngredientType) =>
       [...Array(ingredients[igKey])].map((_, i: number) => (
         <BurgerIngredient key={igKey + i} igType={igKey} />
       ))

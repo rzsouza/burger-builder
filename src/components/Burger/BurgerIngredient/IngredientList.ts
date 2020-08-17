@@ -1,7 +1,7 @@
-import IngredientTypes from './IngredientTypes';
+import IngredientType from './IngredientType';
 
 type IngredientList = {
-  [key in IngredientTypes]?: number;
+  [key in IngredientType]?: number;
 };
 
 type IngredientListProvider = {
