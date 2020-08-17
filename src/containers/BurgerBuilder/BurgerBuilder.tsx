@@ -1,9 +1,9 @@
 import React, { Fragment, useState } from 'react';
 import Burger from '../../components/Burger/Burger';
-import IngredientListProvider from '../../components/Burger/BurgerIngredient/IngredientList';
+import IngredientList from '../../components/Burger/BurgerIngredient/IngredientList';
 
-function BurgerBuilder() {
-  const [ingredients] = useState<IngredientListProvider>({
+const BurgerBuilder = () => {
+  const [ingredients] = useState<IngredientList>({
     salad: 1,
     bacon: 1,
     cheese: 2,
@@ -16,6 +16,6 @@ function BurgerBuilder() {
       <div>Build Controls</div>
     </Fragment>
   );
-}
+};
 
 export default BurgerBuilder;
