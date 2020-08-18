@@ -16,6 +16,7 @@ const INGREDIENT_PRICES: IngredientList = {
 const BurgerBuilder = () => {
   const [state, setState] = useState<{
     ingredients: IngredientList;
+    purchaseable: boolean;
     totalPrice: number;
   }>({
     ingredients: {
@@ -24,8 +25,26 @@ const BurgerBuilder = () => {
       cheese: 2,
       meat: 2,
     },
+    purchaseable: false,
     totalPrice: 4,
   });
+
+  const updatePurchaseState = () => {
+    const actualIngredients = state.ingredients;
+    let purchaseable = false;
+    let key: IngredientType;
+    for (key in actualIngredients) {
+      // noinspection JSUnfilteredForInLoop
+      if ((actualIngredients[key] || 0) > 0) {
+        purchaseable = true;
+        break;
+      }
+    }
+
+    let nextState = { ...state };
+    nextState['purchaseable'] = purchaseable;
+    setState(nextState);
+  };
 
   const ingredientAddedHandler = (igType: IngredientType) => {
     const oldCount = state.ingredients[igType] || 0;
@@ -35,6 +54,7 @@ const BurgerBuilder = () => {
     updatedState.ingredients[igType] = updatedCount;
     updatedState.totalPrice = (INGREDIENT_PRICES[igType] || 0) + oldPrice;
     setState(updatedState);
+    updatePurchaseState();
   };
 
   const ingredientRemovedHandler = (igType: IngredientType) => {
@@ -47,6 +67,7 @@ const BurgerBuilder = () => {
     updatedState.ingredients[igType] = updatedCount;
     updatedState.totalPrice = oldPrice - (INGREDIENT_PRICES[igType] || 0);
     setState(updatedState);
+    updatePurchaseState();
   };
 
   const actualIngredients = state.ingredients;
@@ -65,6 +86,7 @@ const BurgerBuilder = () => {
         ingredientAdded={ingredientAddedHandler}
         ingredientRemoved={ingredientRemovedHandler}
         disabledInfo={disabledInfo}
+        purchaseable={state.purchaseable}
       />
     </Fragment>
   );

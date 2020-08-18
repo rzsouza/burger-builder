@@ -17,22 +17,35 @@ const BuildControls: React.FC<{
   ingredientAdded: IngredientToVoidFunction;
   ingredientRemoved: IngredientToVoidFunction;
   disabledInfo: IngredientListBoolean;
+  purchaseable: boolean;
   price: number;
-}> = ({ ingredientAdded, ingredientRemoved, disabledInfo, price }) => (
-  <div className={classes.BuildControls}>
-    <p>
-      Current Price: <strong>{price.toFixed(2)}</strong>
-    </p>
-    {controls.map((ctrl) => (
-      <BuildControl
-        key={ctrl.label}
-        label={ctrl.label}
-        added={() => ingredientAdded(ctrl.type)}
-        removed={() => ingredientRemoved(ctrl.type)}
-        disabled={disabledInfo[ctrl.type]}
-      />
-    ))}
-  </div>
-);
+}> = ({
+  ingredientAdded,
+  ingredientRemoved,
+  disabledInfo,
+  purchaseable,
+  price,
+}) => {
+  console.log(purchaseable);
+  return (
+    <div className={classes.BuildControls}>
+      <p>
+        Current Price: <strong>{price.toFixed(2)}</strong>
+      </p>
+      {controls.map((ctrl) => (
+        <BuildControl
+          key={ctrl.label}
+          label={ctrl.label}
+          added={() => ingredientAdded(ctrl.type)}
+          removed={() => ingredientRemoved(ctrl.type)}
+          disabled={disabledInfo[ctrl.type]}
+        />
+      ))}
+      <button disabled={!purchaseable} className={classes.OrderButton}>
+        ORDER NOW
+      </button>
+    </div>
+  );
+};
 
 export default BuildControls;
