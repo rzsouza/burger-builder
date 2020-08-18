@@ -29,8 +29,11 @@ const BurgerBuilder = () => {
     totalPrice: 4,
   });
 
-  const updatePurchaseState = () => {
-    const actualIngredients = state.ingredients;
+  const updatePurchaseState = (updatedState: {
+    purchaseable: boolean;
+    totalPrice: number;
+    ingredients: IngredientList;
+  }) => {
     let purchaseable = false;
     let key: IngredientType;
     for (key in actualIngredients) {
@@ -41,9 +44,8 @@ const BurgerBuilder = () => {
       }
     }
 
-    let nextState = { ...state };
-    nextState['purchaseable'] = purchaseable;
-    setState(nextState);
+    updatedState['purchaseable'] = purchaseable;
+    setState(updatedState);
   };
 
   const ingredientAddedHandler = (igType: IngredientType) => {
@@ -53,8 +55,7 @@ const BurgerBuilder = () => {
     const oldPrice = state.totalPrice || 0;
     updatedState.ingredients[igType] = updatedCount;
     updatedState.totalPrice = (INGREDIENT_PRICES[igType] || 0) + oldPrice;
-    setState(updatedState);
-    updatePurchaseState();
+    updatePurchaseState(updatedState);
   };
 
   const ingredientRemovedHandler = (igType: IngredientType) => {
@@ -66,8 +67,7 @@ const BurgerBuilder = () => {
     const oldPrice = state.totalPrice || 0;
     updatedState.ingredients[igType] = updatedCount;
     updatedState.totalPrice = oldPrice - (INGREDIENT_PRICES[igType] || 0);
-    setState(updatedState);
-    updatePurchaseState();
+    updatePurchaseState(updatedState);
   };
 
   const actualIngredients = state.ingredients;
