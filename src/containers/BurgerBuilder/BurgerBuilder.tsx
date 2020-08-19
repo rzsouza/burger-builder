@@ -5,6 +5,8 @@ import IngredientList, {
 } from '../../components/Burger/BurgerIngredient/IngredientList';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import IngredientType from '../../components/Burger/BurgerIngredient/IngredientType';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 const INGREDIENT_PRICES: IngredientList = {
   salad: 0.5,
@@ -13,27 +15,27 @@ const INGREDIENT_PRICES: IngredientList = {
   bacon: 0.7,
 };
 
+type BurgerBuilderState = {
+  ingredients: IngredientList;
+  purchaseable: boolean;
+  totalPrice: number;
+  purchasing: boolean;
+};
+
 const BurgerBuilder = () => {
-  const [state, setState] = useState<{
-    ingredients: IngredientList;
-    purchaseable: boolean;
-    totalPrice: number;
-  }>({
+  const [state, setState] = useState<BurgerBuilderState>({
     ingredients: {
-      salad: 1,
-      bacon: 1,
-      cheese: 2,
-      meat: 2,
+      salad: 0,
+      bacon: 0,
+      cheese: 0,
+      meat: 0,
     },
     purchaseable: false,
     totalPrice: 4,
+    purchasing: false,
   });
 
-  const updatePurchaseState = (updatedState: {
-    purchaseable: boolean;
-    totalPrice: number;
-    ingredients: IngredientList;
-  }) => {
+  const updatePurchaseState = (updatedState: BurgerBuilderState) => {
     let purchaseable = false;
     let key: IngredientType;
     for (key in actualIngredients) {
@@ -70,6 +72,14 @@ const BurgerBuilder = () => {
     updatePurchaseState(updatedState);
   };
 
+  const purchaseHandler = () => {
+    setState({ ...state, ...{ purchasing: true } });
+  };
+
+  const purchaseCancelHandler = () => {
+    setState({ ...state, ...{ purchasing: false } });
+  };
+
   const actualIngredients = state.ingredients;
   const disabledInfo: IngredientListBoolean = {};
   let key: IngredientType;
@@ -80,6 +90,9 @@ const BurgerBuilder = () => {
 
   return (
     <Fragment>
+      <Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
+        <OrderSummary ingredients={state.ingredients} />
+      </Modal>
       <Burger ingredients={state.ingredients} />
       <BuildControls
         price={state.totalPrice}
@@ -87,6 +100,7 @@ const BurgerBuilder = () => {
         ingredientRemoved={ingredientRemovedHandler}
         disabledInfo={disabledInfo}
         purchaseable={state.purchaseable}
+        ordered={purchaseHandler}
       />
     </Fragment>
   );

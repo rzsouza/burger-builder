@@ -19,14 +19,15 @@ const BuildControls: React.FC<{
   disabledInfo: IngredientListBoolean;
   purchaseable: boolean;
   price: number;
+  ordered: () => void;
 }> = ({
   ingredientAdded,
   ingredientRemoved,
   disabledInfo,
   purchaseable,
   price,
+  ordered,
 }) => {
-  console.log(purchaseable);
   return (
     <div className={classes.BuildControls}>
       <p>
@@ -41,7 +42,11 @@ const BuildControls: React.FC<{
           disabled={disabledInfo[ctrl.type]}
         />
       ))}
-      <button disabled={!purchaseable} className={classes.OrderButton}>
+      <button
+        disabled={!purchaseable}
+        className={classes.OrderButton}
+        onClick={ordered}
+      >
         ORDER NOW
       </button>
     </div>
