@@ -96,6 +96,7 @@ const BurgerBuilder = () => {
     <Fragment>
       <Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
         <OrderSummary
+          price={state.totalPrice}
           ingredients={state.ingredients}
           purchaseCancelled={purchaseCancelHandler}
           purchaseContinued={purchaseContinueHandler}
