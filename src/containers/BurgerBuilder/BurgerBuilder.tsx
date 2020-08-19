@@ -80,6 +80,10 @@ const BurgerBuilder = () => {
     setState({ ...state, ...{ purchasing: false } });
   };
 
+  const purchaseContinueHandler = () => {
+    setState({ ...state, ...{ purchasing: false } });
+  };
+
   const actualIngredients = state.ingredients;
   const disabledInfo: IngredientListBoolean = {};
   let key: IngredientType;
@@ -91,7 +95,11 @@ const BurgerBuilder = () => {
   return (
     <Fragment>
       <Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
-        <OrderSummary ingredients={state.ingredients} />
+        <OrderSummary
+          ingredients={state.ingredients}
+          purchaseCancelled={purchaseCancelHandler}
+          purchaseContinued={purchaseContinueHandler}
+        />
       </Modal>
       <Burger ingredients={state.ingredients} />
       <BuildControls
