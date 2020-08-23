@@ -1,12 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, ReactNode } from 'react';
 import classes from './Modal.module.scss';
 import Backdrop from '../Backdrop/Backdrop';
 
-const Modal: React.FC<{ show: boolean; modalClosed: () => void }> = ({
-  show,
-  children,
-  modalClosed,
-}) => (
+const Modal: React.FC<{
+  show: boolean;
+  modalClosed: () => void;
+  children?: ReactNode;
+}> = ({ show, children, modalClosed }) => (
   <Fragment>
     <Backdrop show={show} clicked={modalClosed} />
     <div
@@ -21,4 +21,4 @@ const Modal: React.FC<{ show: boolean; modalClosed: () => void }> = ({
   </Fragment>
 );
 
-export default Modal;
+export default React.memo(Modal);
