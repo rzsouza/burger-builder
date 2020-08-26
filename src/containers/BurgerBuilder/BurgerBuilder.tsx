@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import Burger from '../../components/Burger/Burger';
 import IngredientList, {
   IngredientListBoolean,
@@ -19,33 +19,45 @@ const INGREDIENT_PRICES: IngredientList = {
 };
 
 type BurgerBuilderState = {
-  ingredients: IngredientList;
+  ingredients: IngredientList | undefined;
   purchaseable: boolean;
   totalPrice: number;
   purchasing: boolean;
   loading: boolean;
+  error: boolean;
 };
 
 const BurgerBuilder = () => {
   const [state, setState] = useState<BurgerBuilderState>({
-    ingredients: {
-      salad: 0,
-      bacon: 0,
-      cheese: 0,
-      meat: 0,
-    },
+    ingredients: undefined,
     purchaseable: false,
     totalPrice: 4,
     purchasing: false,
     loading: false,
+    error: false,
   });
+
+  useEffect(() => {
+    axios
+      .get('/ingredients.json')
+      .then((res) => {
+        setState({ ...state, ...{ ingredients: res.data } });
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+          setState({ ...state, ...{ error: true } });
+        }
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const updatePurchaseState = (updatedState: BurgerBuilderState) => {
     let purchaseable = false;
     let key: IngredientType;
     for (key in actualIngredients) {
       // noinspection JSUnfilteredForInLoop
-      if ((actualIngredients[key] || 0) > 0) {
+      if ((!actualIngredients || actualIngredients[key] || 0) > 0) {
         purchaseable = true;
         break;
       }
@@ -56,22 +68,31 @@ const BurgerBuilder = () => {
   };
 
   const ingredientAddedHandler = (igType: IngredientType) => {
-    const oldCount = state.ingredients[igType] || 0;
+    const oldCount = state.ingredients ? state.ingredients[igType] || 0 : 0;
     const updatedCount = oldCount + 1;
     const updatedState = { ...state };
     const oldPrice = state.totalPrice || 0;
+
+    if (!updatedState.ingredients) {
+      updatedState.ingredients = { meat: 0, bacon: 0, cheese: 0, salad: 0 };
+    }
     updatedState.ingredients[igType] = updatedCount;
+
     updatedState.totalPrice = (INGREDIENT_PRICES[igType] || 0) + oldPrice;
     updatePurchaseState(updatedState);
   };
 
   const ingredientRemovedHandler = (igType: IngredientType) => {
-    const oldCount = state.ingredients[igType] || 0;
+    const oldCount = state.ingredients ? state.ingredients[igType] || 0 : 0;
     if (oldCount <= 0) return;
 
     const updatedCount = oldCount - 1;
     const updatedState = { ...state };
     const oldPrice = state.totalPrice || 0;
+
+    if (!updatedState.ingredients) {
+      updatedState.ingredients = { meat: 0, bacon: 0, cheese: 0, salad: 0 };
+    }
     updatedState.ingredients[igType] = updatedCount;
     updatedState.totalPrice = oldPrice - (INGREDIENT_PRICES[igType] || 0);
     updatePurchaseState(updatedState);
@@ -126,26 +147,28 @@ const BurgerBuilder = () => {
   const disabledInfo: IngredientListBoolean = {};
   let key: IngredientType;
   for (key in actualIngredients) {
-    // noinspection JSUnfilteredForInLoop
-    disabledInfo[key] = (actualIngredients[key] || 0) <= 0;
+    if (actualIngredients) {
+      // noinspection JSUnfilteredForInLoop
+      disabledInfo[key] = (actualIngredients[key] || 0) <= 0;
+    }
   }
 
-  const orderSummary = state.loading ? (
-    <Spinner />
-  ) : (
-    <OrderSummary
-      price={state.totalPrice}
-      ingredients={state.ingredients}
-      purchaseCancelled={purchaseCancelHandler}
-      purchaseContinued={purchaseContinueHandler}
-    />
-  );
+  const orderSummary =
+    state.loading || !state.ingredients ? (
+      <Spinner />
+    ) : (
+      <OrderSummary
+        price={state.totalPrice}
+        ingredients={state.ingredients}
+        purchaseCancelled={purchaseCancelHandler}
+        purchaseContinued={purchaseContinueHandler}
+      />
+    );
 
-  return (
+  const burger = state.error ? (
+    <p>Ingredients can't be loaded</p>
+  ) : state.ingredients ? (
     <Fragment>
-      <Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
-        {orderSummary}
-      </Modal>
       <Burger ingredients={state.ingredients} />
       <BuildControls
         price={state.totalPrice}
@@ -155,6 +178,17 @@ const BurgerBuilder = () => {
         purchaseable={state.purchaseable}
         ordered={purchaseHandler}
       />
+    </Fragment>
+  ) : (
+    <Spinner />
+  );
+
+  return (
+    <Fragment>
+      <Modal show={state.purchasing} modalClosed={purchaseCancelHandler}>
+        {orderSummary}
+      </Modal>
+      {burger}
     </Fragment>
   );
 };

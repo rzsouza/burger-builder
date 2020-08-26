@@ -10,7 +10,6 @@ const useHttpErrorHandler = (
 
   const reqInterceptor = axios.interceptors.request.use((req) => {
     setError(null);
-    console.log('err null');
     return req;
   });
 
