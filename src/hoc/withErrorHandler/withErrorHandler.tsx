@@ -8,7 +8,6 @@ function withErrorHandler(
   axios: AxiosInstance
 ) {
   return (props: PropsWithChildren<any>) => {
-    // @ts-ignore
     const [error, errorConfirmedHandler]: [
       string | undefined | null,
       () => void | undefined

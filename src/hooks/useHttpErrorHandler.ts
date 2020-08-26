@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 
 type ErrorType = string | undefined | null;
 
-export default (axios: AxiosInstance) => {
+const useHttpErrorHandler = (
+  axios: AxiosInstance
+): [ErrorType, () => void | undefined] => {
   const [error, setError] = useState<ErrorType>();
 
   const reqInterceptor = axios.interceptors.request.use((req) => {
@@ -38,3 +40,5 @@ export default (axios: AxiosInstance) => {
 
   return [error, errorConfirmedHandler];
 };
+
+export default useHttpErrorHandler;
