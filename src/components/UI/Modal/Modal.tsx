@@ -4,7 +4,7 @@ import Backdrop from '../Backdrop/Backdrop';
 
 const Modal: React.FC<{
   show: boolean;
-  modalClosed: () => void;
+  modalClosed?: () => void;
   children?: ReactNode;
 }> = ({ show, children, modalClosed }) => (
   <Fragment>
